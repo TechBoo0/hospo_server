@@ -22,12 +22,21 @@ UserRouter.get("/",async(req,res)=>{
 })
 UserRouter.post('/register', async (req, res) => {
     try {
+        console.log(req.body)
         const { Username, Email, Password, Gender, Contact } = req.body;
+        
+        if (!Username || !Email || !Password) {
+            return res.status(400).json({ message: "Username, Email and Password are required" });
+        }
+        
         const existingUser = await User.findOne({ Email });
         if (existingUser) {
             return res.status(400).json({ message: "Email already exists" });
         }
-        const hashedPassword = await bcrypt.hash(Password, 10);
+        
+        const passwordString = String(Password);
+        const hashedPassword = await bcrypt.hash(passwordString, 10);
+        
         const newUser = new User({
             Username,
             Email,
@@ -97,7 +106,7 @@ UserRouter.post('/login', async (req, res) => {
         }
         const token = jwt.sign({ id: user._id, Email },secret, { expiresIn: '1h' });
 
-        res.status(200).json({ message: "Login successful", token });
+        res.status(200).json({ message: "Login successful", token,Username:user.Username });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
