@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const UserRouter=express.Router();
 const secret=process.env.JWT;
+UserRouter.use(express.json())
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',  
