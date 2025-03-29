@@ -2,11 +2,14 @@ const express=require('express');
 const dotenv=require('dotenv');
 const cors=require('cors');
 const mongoose=require('mongoose');
+const UserRouter=require('./Routes/UserRoutes');
 
 const app=express();
 dotenv.config();
 
 app.use(cors());
+app.use(express.json());
+app.use("/",UserRouter);
 
 function DatabaseConnection(){
 mongoose.connect(process.env.DATABASE)
