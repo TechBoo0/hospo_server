@@ -3,13 +3,15 @@ const dotenv=require('dotenv');
 const cors=require('cors');
 const mongoose=require('mongoose');
 const UserRouter=require('./Routes/UserRoutes');
+const medcard=require("./Routes/medcards")
 
 const app=express();
 dotenv.config();
 
 app.use(cors());
 app.use(express.json());
-app.use("/",UserRouter);
+app.use("/user",UserRouter);
+app.use("/medcard",medcard)
 
 function DatabaseConnection(){
 mongoose.connect(process.env.DATABASE)
@@ -21,7 +23,7 @@ mongoose.connect(process.env.DATABASE)
 })
 }
 
-app.listen(process.env.PORT,()=>{
-    DatabaseConnection()
+app.listen(process.env.PORT,async()=>{
+    await DatabaseConnection()
     console.log(`Your server is running ${process.env.PORT}`)
 })

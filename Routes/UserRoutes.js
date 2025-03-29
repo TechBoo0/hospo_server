@@ -15,7 +15,10 @@ const transporter = nodemailer.createTransport({
         pass: process.env.PASS 
     }
 });
-
+UserRouter.get("/",async(req,res)=>{
+    const user=await User.find({})
+    res.json(user)
+})
 UserRouter.post('/register', async (req, res) => {
     try {
         const { Username, Email, Password, Gender, Contact } = req.body;
